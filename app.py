@@ -22,10 +22,6 @@ from werkzeug.security import generate_password_hash
 from werkzeug.security import check_password_hash
 from dotenv import load_dotenv
 import os
-from langchain_community.document_loaders import TextLoader
-from langchain_text_splitters import RecursiveCharacterTextSplitter
-from langchain_community.vectorstores import FAISS
-from langchain_community.embeddings import HuggingFaceEmbeddings
 
 import uuid
 import plotly.express as px
@@ -143,77 +139,20 @@ client = Groq(
 )
 
 # =========================
-# LOAD COMPANY DOCUMENTS
-# =========================
-loader = TextLoader("company_docs/support_data.txt")
-
-documents = loader.load()
-
-# =========================
-# SPLIT DOCUMENTS
-# =========================
-text_splitter = RecursiveCharacterTextSplitter(
-    chunk_size=500,
-    chunk_overlap=50
-)
-
-docs = text_splitter.split_documents(documents)
-
-# =========================
-# LAZY LOAD AI COMPONENTS
-# =========================
-embeddings = None
-vectorstore = None
-
-
-def load_vectorstore():
-
-    global embeddings, vectorstore
-
-    if embeddings is None:
-
-        embeddings = HuggingFaceEmbeddings(
-            model_name="sentence-transformers/all-MiniLM-L6-v2"
-        )
-
-    if vectorstore is None:
-
-        vectorstore = FAISS.from_documents(
-            docs,
-            embeddings
-        )
-
-    return vectorstore
-
-# =========================
-# RAG FUNCTION
+# SIMPLE RAG FUNCTION
 # =========================
 def ask_rag(user_input):
 
-    vectorstore = load_vectorstore()
-
-    similar_docs = vectorstore.similarity_search(
-        user_input,
-        k=2
-    )
-
-    context = "\n".join([
-        doc.page_content for doc in similar_docs
-    ])
-
-    prompt = f"""
-    You are a professional customer support assistant.
-
-    Use ONLY the following company knowledge.
-
-    Company Knowledge:
-    {context}
-
-    Customer Question:
-    {user_input}
-    """
-
     try:
+
+        prompt = f"""
+        You are a professional customer support assistant.
+
+        Customer Question:
+        {user_input}
+
+        Give a professional support response.
+        """
 
         response = client.chat.completions.create(
             model="llama-3.1-8b-instant",
