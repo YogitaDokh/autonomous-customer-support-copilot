@@ -505,9 +505,13 @@ def chatbot_response():
 @login_required
 def dashboard():
 
-    conversations = session.get("conversations", {})
+    total_conversations = Chat.query.filter_by(
+        user_id=current_user.id
+    ).count()
 
-    total_conversations = len(conversations)
+    all_messages = Message.query.join(Chat).filter(
+        Chat.user_id == current_user.id
+    ).all()
 
     intents = {
         "refund": 0,
@@ -519,20 +523,15 @@ def dashboard():
 
     escalation_count = 0
 
-    for chat_id, messages in conversations.items():
+    for msg in all_messages:
 
-        for msg in messages:
+        detected_intent = msg.intent or "general_query"
 
-            detected_intent = msg.get(
-                "intent",
-                "general_query"
-            )
+        if detected_intent in intents:
+            intents[detected_intent] += 1
 
-            if detected_intent in intents:
-                intents[detected_intent] += 1
-
-            if msg.get("escalated") == True:
-                escalation_count += 1
+        if msg.escalated:
+            escalation_count += 1
 
     pie_fig = px.pie(
         names=list(intents.keys()),
@@ -588,6 +587,7 @@ def dashboard():
         pie_graph=pie_graph,
         bar_graph=bar_graph
     )
+
 
 # =========================
 # SETTINGS
