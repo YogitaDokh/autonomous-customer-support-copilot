@@ -1,0 +1,14 @@
+Refund Policy:
+Refunds are processed within 5-7 business days.
+
+Password Reset:
+Users can reset passwords from Settings > Security > Reset Password.
+
+Account Suspension:
+Accounts may be suspended after multiple failed login attempts.
+
+Payment Failure:
+Customers should verify card details or try another payment method.
+
+Delivery Policy:
+Orders are delivered within 3-5 business days.

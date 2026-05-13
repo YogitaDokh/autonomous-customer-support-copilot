@@ -1,0 +1,65 @@
+user_input,response,intent,escalated
+hi,"Sorry, I am unable to respond right now.",general_query,False
+cancel the order,"Sorry, I am unable to respond right now.",general_query,False
+refund,"I'd be happy to help with your refund question. 
+
+According to our company's refund policy, refunds are processed within 5-7 business days. If you have any issues with your refund, please let me know and I'll be happy to assist you further. Can you please provide me with your order number so I can look into this for you?",refund,False
+password,"To reset your password, please follow these steps:
+
+1. Log in to your account.
+2. Go to Settings.
+3. Click on Security.
+4. Select Reset Password.
+
+If you're having trouble resetting your password, please feel free to ask, and I'll be happy to assist you further.",password_reset,False
+what are the products you sale,"I'm happy to help you with your question. Unfortunately, I don't see any information about our products in the company knowledge provided. However, I can suggest some options for you to find out more about our products.
+
+You can visit our website to browse through our product catalog. Alternatively, you can also contact our customer support team, and we'll be happy to provide you with more information about our products.
+
+If you have any other questions or concerns, feel free to ask, and I'll do my best to assist you.",general_query,False
+fraud,Your issue has been escalated to a human support agent.,complaint,True
+cancel my order,"I'd be happy to help you with your concern. However, I need a bit more information to assist you properly. 
+
+Can you please provide me with your order number so I can look into canceling it for you? Additionally, please let me know if your order has already shipped or if it's still in processing. This will help me to provide a more accurate solution to your request.",refund,False
+passwoed,"It seems like you're trying to reset your password. To do this, you can follow these steps:
+
+1. Go to the Settings section of your account.
+2. Click on Security.
+3. Select Reset Password from the options.
+
+If you need further assistance, please let me know and I'll be happy to help.",password_reset,False
+cancel order,"I'd be happy to help you with your question about canceling an order. 
+
+Unfortunately, I don't have information on our company's order cancellation policy in the provided knowledge base. However, I can suggest a few options for you to consider:
+
+1. Please check your order confirmation email for any information on canceling or modifying your order.
+2. You can try contacting our customer support team directly, and we'll do our best to assist you with your request.
+3. If you've already placed your order, you may want to reach out to our customer support team to see if there's anything we can do to assist you.
+
+If you have any other questions or need further assistance, please don't hesitate to ask.",refund,False
+refund,"Thank you for reaching out to us. I'd be happy to help with your refund question.
+
+To process a refund, please note that our Refund Policy states that refunds are processed within 5-7 business days. If you have any issues with your order or would like to initiate a refund, please contact us and we'll be happy to assist you further.
+
+Is there anything else I can help you with regarding your refund?",refund,False
+refund,"Thank you for reaching out to us. I'd be happy to help with your refund inquiry.
+
+To process a refund, please note that our refund policy states that refunds are processed within 5-7 business days. If you have any issues with your order or would like to initiate a refund, please let me know your order number or the details of your purchase, and I'll be happy to assist you further.",refund,False
+when will i get my order,"Thank you for reaching out to us. I'd be happy to help you with your question.
+
+According to our Delivery Policy, orders are typically delivered within 3-5 business days. This timeframe may vary depending on your location and other factors.
+
+To give you a more accurate estimate, could you please provide me with your order number or the date you placed your order? This will help me look into the status of your order and provide you with a more precise delivery date.",general_query,False
+what are the policy you provide,"We have the following policies in place to ensure a smooth and secure experience for our customers:
+
+1. **Refund Policy**: We process refunds within 5-7 business days. If you have any issues with your order, please contact us and we'll be happy to assist you.
+
+2. **Password Reset**: If you're having trouble accessing your account, you can reset your password from Settings > Security > Reset Password.
+
+3. **Account Suspension**: To protect our customers' accounts, we may suspend accounts after multiple failed login attempts. If your account is suspended, please contact us to resolve the issue.
+
+4. **Payment Failure**: If your payment fails, please verify your card details or try another payment method. This will help you complete your order successfully.
+
+5. **Delivery Policy**: We strive to deliver orders within 3-5 business days. If you have any concerns about the delivery of your order, please contact us and we'll do our best to resolve the issue.
+
+These policies are in place to ensure that you have a positive experience with our company. If you have any further questions or concerns, please don't hesitate to reach out to us.",general_query,False

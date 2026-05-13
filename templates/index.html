@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>AI Support Copilot</title>
+
+    <link rel="stylesheet" href="/static/style.css">
+
+</head>
+<body>
+
+<div class="app-container">
+
+    <div class="sidebar">
+
+        <h2>AI Copilot</h2>
+
+        <button
+            class="new-chat-btn"
+            onclick="createNewChat()"
+        >
+            + New Chat
+        </button>
+
+       <div class="history-section">
+
+    {% for chat in chats %}
+
+    <div class="chat-history-item {% if chat.id == active_chat_id %}active-chat{% endif %}">
+
+        <span onclick="window.location.href='/chat?chat_id={{ chat.id }}'">
+
+            {{ chat.title }}
+
+        </span>
+
+        <button
+            class="delete-btn"
+            onclick="deleteChat('{{ chat.id }}')"
+        >
+            ✕
+        </button>
+
+    </div>
+
+    {% endfor %}
+
+</div>
+        <div class="bottom-menu">
+
+            <a href="/dashboard">📊 Analytics</a>
+
+            <a href="/settings">⚙ Settings</a>
+
+            <a href="/logout">🚪 Logout</a>
+
+        </div>
+
+    </div>
+
+    <div class="chat-section">
+
+        <div class="chat-header">
+            Autonomous Customer Support Copilot
+        </div>
+
+        <div id="chat-box">
+
+            {% for msg in messages %}
+
+                <div class="message user">
+                    {{ msg.user_message }}
+                </div>
+
+                <div class="message bot">
+                    {{ msg.bot_response }}
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+        <div class="input-area">
+
+            <input
+                type="text"
+                id="user-input"
+                placeholder="Ask anything..."
+                onkeypress="handleKey(event)"
+            >
+
+            <button onclick="sendMessage()">➤</button>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+function handleKey(event) {
+
+    if (event.key === "Enter") {
+        sendMessage();
+    }
+}
+
+function addMessage(message, sender) {
+
+    const chatBox = document.getElementById("chat-box");
+
+    const messageDiv = document.createElement("div");
+
+    messageDiv.classList.add("message", sender);
+
+    messageDiv.innerHTML = message;
+
+    chatBox.appendChild(messageDiv);
+
+    chatBox.scrollTop = chatBox.scrollHeight;
+}
+
+function sendMessage() {
+
+    const input = document.getElementById("user-input");
+
+    const message = input.value.trim();
+
+    if (message === "") return;
+
+    addMessage(message, "user");
+
+    input.value = "";
+
+    const activeChatId = "{{ active_chat_id }}";
+
+    fetch("/get", {
+
+        method: "POST",
+
+        headers: {
+            "Content-Type": "application/json"
+        },
+
+        body: JSON.stringify({
+
+            message: message,
+
+            chat_id: activeChatId
+
+        })
+
+    })
+
+    .then(response => response.json())
+
+    .then(data => {
+
+        addMessage(data.response, "bot");
+
+    });
+}
+
+function createNewChat() {
+
+    fetch('/new_chat')
+    .then(() => {
+        window.location.reload();
+    });
+}
+
+function switchChat(chatId) {
+
+    fetch(`/switch_chat/${chatId}`)
+    .then(response => response.json())
+    .then(data => {
+
+        if (data.success) {
+            window.location.reload();
+        }
+    });
+}
+
+function deleteChat(chatId) {
+
+    fetch(`/delete_chat/${chatId}`)
+    .then(() => {
+        window.location.reload();
+    });
+}
+
+</script>
+
+</body>
+</html>
