@@ -160,26 +160,42 @@ text_splitter = RecursiveCharacterTextSplitter(
 docs = text_splitter.split_documents(documents)
 
 # =========================
-# EMBEDDINGS
+# LAZY LOAD AI COMPONENTS
 # =========================
-embedding_model = HuggingFaceEmbeddings(
-    model_name="sentence-transformers/all-MiniLM-L6-v2"
-)
+embeddings = None
+vectorstore = None
 
-# =========================
-# VECTOR STORE
-# =========================
-vectorstore = FAISS.from_documents(
-    docs,
-    embedding_model
-)
+
+def load_vectorstore():
+
+    global embeddings, vectorstore
+
+    if embeddings is None:
+
+        embeddings = HuggingFaceEmbeddings(
+            model_name="sentence-transformers/all-MiniLM-L6-v2"
+        )
+
+    if vectorstore is None:
+
+        vectorstore = FAISS.from_documents(
+            docs,
+            embeddings
+        )
+
+    return vectorstore
 
 # =========================
 # RAG FUNCTION
 # =========================
 def ask_rag(user_input):
 
-    similar_docs = vectorstore.similarity_search(user_input, k=2)
+    vectorstore = load_vectorstore()
+
+    similar_docs = vectorstore.similarity_search(
+        user_input,
+        k=2
+    )
 
     context = "\n".join([
         doc.page_content for doc in similar_docs
@@ -217,7 +233,6 @@ def ask_rag(user_input):
         print("RAG ERROR:", e)
 
         return "Sorry, I am unable to respond right now."
-
 # =========================
 # INTENT DETECTION
 # =========================
