@@ -6,7 +6,7 @@ from flask import (
     session,
     redirect
 )
-
+from datetime import datetime
 from groq import Groq
 
 from flask_sqlalchemy import SQLAlchemy
@@ -122,6 +122,10 @@ class Message(db.Model):
     escalated = db.Column(
         db.Boolean,
         default=False
+    )
+    timestamp = db.Column(
+        db.DateTime,
+        default=datetime.utcnow
     )
 # =========================
 # USER LOADER
@@ -509,6 +513,18 @@ def dashboard():
         user_id=current_user.id
     ).count()
 
+    total_users = User.query.count()
+
+    total_messages = Message.query.count()
+
+    average_messages = 0
+
+    if total_conversations > 0:
+        average_messages = round(
+        total_messages / total_conversations,
+        2
+    )
+
     all_messages = Message.query.join(Chat).filter(
         Chat.user_id == current_user.id
     ).all()
@@ -532,6 +548,14 @@ def dashboard():
 
         if msg.escalated:
             escalation_count += 1
+    
+    escalation_percentage = 0
+
+    if total_messages > 0:
+        escalation_percentage = round(
+            (escalation_count / total_messages) * 100,
+        2
+    )
 
     pie_fig = px.pie(
         names=list(intents.keys()),
@@ -583,6 +607,11 @@ def dashboard():
     return render_template(
         "dashboard.html",
         total_conversations=total_conversations,
+        total_users=total_users,
+        total_messages=total_messages,
+        average_messages=average_messages,
+        escalation_percentage=escalation_percentage,
+        
         total_escalations=escalation_count,
         pie_graph=pie_graph,
         bar_graph=bar_graph

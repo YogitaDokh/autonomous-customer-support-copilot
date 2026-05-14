@@ -18,6 +18,25 @@
             color: white;
             font-family: Arial, sans-serif;
             padding: 30px;
+            transition: 0.3s;
+        }
+
+        .light-mode {
+            background: white;
+            color: black;
+        }
+
+        .light-mode .sidebar {
+            background: #f1f5f9;
+        }
+
+        .light-mode .chat-container {
+            background: #ffffff;
+        }
+
+        .light-mode .message {
+            background: #e2e8f0;
+            color: black;
         }
 
         .top-bar {
@@ -111,6 +130,10 @@
 
     <div class="top-bar">
 
+        <button onclick="toggleTheme()" id="theme-btn">
+            Toggle Theme
+        </button>
+
         <h1>📊 Live Support Analytics</h1>
 
         <a href="/" class="back-btn">
@@ -120,6 +143,29 @@
     </div>
 
     <!-- Stats Cards -->
+     <div class="stats-container">
+
+        <div class="stat-card">
+            <h3>Total Users</h3>
+            <p>{{ total_users }}</p>
+        </div>
+
+        <div class="stat-card">
+            <h3>Total Messages</h3>
+            <p>{{ total_messages }}</p>
+        </div>
+
+        <div class="stat-card">
+            <h3>Escalation %</h3>
+            <p>{{ escalation_percentage }}%</p>
+        </div>
+
+        <div class="stat-card">
+            <h3>Avg Messages/Chat</h3>
+            <p>{{ average_messages }}</p>
+        </div>
+
+    </div>
 
     <div class="stats-grid">
 
@@ -176,6 +222,30 @@
     setTimeout(function () {
         location.reload();
     }, 10000);
+
+    function toggleTheme() {
+
+        document.body.classList.toggle("light-mode");
+
+        if(document.body.classList.contains("light-mode")) {
+
+            localStorage.setItem("theme", "light");
+
+        } else {
+
+            localStorage.setItem("theme", "dark");
+        }
+    }
+
+    window.onload = () => {
+
+        const savedTheme = localStorage.getItem("theme");
+
+        if(savedTheme === "light") {
+
+            document.body.classList.add("light-mode");
+        }
+    }
 
 </script>
 
