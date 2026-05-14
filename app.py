@@ -114,6 +114,11 @@ class Message(db.Model):
     bot_response = db.Column(
         db.Text
     )
+    from datetime import datetime
+    timestamp = db.Column(
+        db.DateTime,
+        default=datetime.now
+    )
 
     intent = db.Column(
         db.String(100)
@@ -123,17 +128,14 @@ class Message(db.Model):
         db.Boolean,
         default=False
     )
-    timestamp = db.Column(
-        db.DateTime,
-        default=datetime.utcnow
-    )
+    
 # =========================
 # USER LOADER
 # =========================
 @login_manager.user_loader
 def load_user(user_id):
 
-    return User.query.get(int(user_id))
+    return db.session.get(User, int(user_id))
 
 # =========================
 # GROQ CLIENT
@@ -150,7 +152,13 @@ def ask_rag(user_input):
     try:
 
         prompt = f"""
-        You are a professional customer support assistant.
+        You are a professional customer support assistant and your name is Nova.
+
+        Rules:
+        - Give short professional answers.
+        - Use bullet points when needed.
+        - Be friendly and clear.
+        - Avoid overly long responses.
 
         Customer Question:
         {user_input}
